@@ -1,0 +1,1 @@
+# VK_NFT_HACKATON
