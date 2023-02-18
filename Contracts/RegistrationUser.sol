@@ -1,18 +1,19 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./MinistryEducation.sol";
+import "./CreateCourse.sol";
 
-contract Registration is MinistryEducation {
+contract RegistrationUser  {
     address private owner;
-    mapping(address => Userinfo) usermap;
+    mapping(address => Userinfo) userMap;
     address[] public userAddresses;
 
     struct Userinfo {
         string name;
         string description;
         bytes32 vkid;
-        mapping(address => string) courses;
+        string[] coursesName;
+        mapping(string => CreateCourse) courses;
     }
 
     event UserChanged(address old_, address new_);
@@ -31,7 +32,7 @@ contract Registration is MinistryEducation {
                 a = true;
             } else {a = false;}
         } 
-        require(a == true);
+        require(a == true, 'Yoa are not a new user');
         _;
     }
 
@@ -42,7 +43,7 @@ contract Registration is MinistryEducation {
                 a = true;
             } else {a = false;}
         } 
-        require(a == false);
+        require(a == false, 'Yoa are a new user, please registrate');
         _;
     }
 
@@ -56,16 +57,30 @@ contract Registration is MinistryEducation {
     }
 
     function addUserinfo(string memory name_, string memory description_, uint vkid_) external notNewuser(msg.sender) {
-        require(usermap[msg.sender].vkid == 0x0000000000000000000000000000000000000000000000000000000000000000, "You have already added the information");
-        Userinfo storage newUserinfo = usermap[msg.sender];
+        require(userMap[msg.sender].vkid == bytes32(0), "You have already added the information");
+        Userinfo storage newUserinfo = userMap[msg.sender];
         newUserinfo.name = name_;
         newUserinfo.description = description_;
         newUserinfo.vkid = createVkid(vkid_);
-        newUserinfo.courses[msg.sender] = 'no';
+        // newUserinfo.courses[msg.sender] = 'not yet';
         emit UserAdded(name_);
     }
 
     function wathUserinfo(address user_) external view returns(string memory, string memory, bytes32) {
-        return(usermap[user_].name, usermap[user_].description, usermap[user_].vkid);
+        return(userMap[user_].name, userMap[user_].description, userMap[user_].vkid);
+    }
+
+    function wathCourses(string memory courseName_) external view returns(address) {
+        Userinfo storage newUserinfo = userMap[msg.sender];
+        return address(newUserinfo.courses[courseName_]); 
+    }
+
+    function addCourse(string memory courseName_, string memory symbol_, string memory description_, uint totalsuplay_) external notNewuser(msg.sender) {
+        require(userMap[msg.sender].vkid != bytes32(0), "First add the user information");
+        CreateCourse course = new CreateCourse(courseName_, symbol_, description_, totalsuplay_);
+        Userinfo storage newUserinfo = userMap[msg.sender];
+        newUserinfo.courses[courseName_] = course; 
+        newUserinfo.coursesName.push(courseName_);
+        emit CourseAdded(courseName_);
     }
 }
