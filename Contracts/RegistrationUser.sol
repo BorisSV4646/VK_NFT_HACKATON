@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "./MinistryEducation.sol";
 
 contract Registration is MinistryEducation {
-    address public user;
+    address private owner;
     mapping(address => Userinfo) usermap;
     address[] public userAddresses;
 
@@ -21,14 +21,33 @@ contract Registration is MinistryEducation {
 
 
     constructor() {
-        user = msg.sender;
+        owner = msg.sender;
     }
 
-
-    modifier onlyUser() {
-        require(user == msg.sender,
-            "You do not have permission to run this function. Only ministry allowed.");
+    modifier notNewuser(address user_) {
+        bool a;
+        for (uint i = 0; i < userAddresses.length; i++) {
+            if (userAddresses[i] == user_) {
+                a = true;
+            } else {a = false;}
+        } 
+        require(a == true);
         _;
+    }
+
+    modifier onlyNewuser(address user_) {
+        bool a;
+        for (uint i = 0; i < userAddresses.length; i++) {
+            if (userAddresses[i] == user_) {
+                a = true;
+            } else {a = false;}
+        } 
+        require(a == false);
+        _;
+    }
+
+    function newUser() external onlyNewuser(msg.sender) {
+        userAddresses.push(msg.sender);
     }
 
     function createVkid(uint vkid_) internal pure returns(bytes32) {
@@ -36,22 +55,17 @@ contract Registration is MinistryEducation {
         return hashIdStudent;
     }
 
-    function setUser(address user_) external onlyUser {
-        emit UserChanged(user, user_);
-        user = user_;
-    }
-
-    function addUser(string memory name_, string memory description_, uint vkid_) external onlyUser {
-        usermap[msg.sender].name = name_;
-        usermap[msg.sender].description = description_;
-        usermap[msg.sender].vkid = createVkid(vkid_);
-        userAddresses.push(msg.sender);
+    function addUserinfo(string memory name_, string memory description_, uint vkid_) external notNewuser(msg.sender) {
+        require(usermap[msg.sender].vkid == 0x0000000000000000000000000000000000000000000000000000000000000000, "You have already added the information");
+        Userinfo storage newUserinfo = usermap[msg.sender];
+        newUserinfo.name = name_;
+        newUserinfo.description = description_;
+        newUserinfo.vkid = createVkid(vkid_);
+        newUserinfo.courses[msg.sender] = 'no';
         emit UserAdded(name_);
     }
-}
 
-        // usermap[msg.sender] = Userinfo({
-        //     name: name_, 
-        //     description: description_,
-        //     vkid: vkid_
-        //     });
+    function wathUserinfo(address user_) external view returns(string memory, string memory, bytes32) {
+        return(usermap[user_].name, usermap[user_].description, usermap[user_].vkid);
+    }
+}
