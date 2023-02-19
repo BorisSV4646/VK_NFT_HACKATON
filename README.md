@@ -1,13 +1,29 @@
-# Sample Hardhat Project
+# VK mini app
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## VK платформа образования
 
-Try running some of the following tasks:
+https://vk.com/app51557925
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+Следующий уровень образования. Теперь вы никогда не потеряете свой диплом, сертифиак или аттестат - они надежно храняться в блокчейне.Тперь можно легко проверить образование и сертификаты любого человека. Наши сертификаты храняться в блокчейне, поэтому их нельзя потерять, подделать, украсть. Также снижается риск мошенничества со стороны создателей курсов, так как вся информация содержится в блокчейне.
+
+## Tехнологии
+
+VK mimi app
+Solidity
+React
+JavaScript
+CSS
+Figma
+
+## Запуск проекта в dev-режиме
+
+- Запустите приложение по ссылке https://vk.com/app51557925
+- Подключите свой кошелек Metamask
+
+## Авторы
+
+Борис Винник, Ильдар Абсалямов, Александра Зверева, Данат Шаль
+
+## Лицензия
+
+MIT

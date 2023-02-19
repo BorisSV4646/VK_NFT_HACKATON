@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@openzeppelin/cli": "^2.8.2",
-    "@openzeppelin/contracts": "^4.8.1"
+    "@openzeppelin/contracts": "^4.8.1",
+    "browserify": "^17.0.0",
+    "ethers": "^6.0.5"
   }
 }

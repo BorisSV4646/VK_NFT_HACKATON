@@ -61,7 +61,7 @@ contract RegistrationUser  {
         Userinfo storage newUserinfo = userMap[msg.sender];
         newUserinfo.name = name_;
         newUserinfo.description = description_;
-        newUserinfo.vkid = createVkid(vkid_);
+        // newUserinfo.vkid = createVkid(vkid_);
         // newUserinfo.courses[msg.sender] = 'not yet';
         emit UserAdded(name_);
     }
